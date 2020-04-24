@@ -8,7 +8,6 @@ service 服务模块
 """
 import importlib
 
-from .system_constants import SystemConstants
 from tools.common_util import CommonUtil
 from tools.httputils import HttpUtils
 from tools.logs import Logs
@@ -49,16 +48,7 @@ class ServiceManager(object):
         :param params: 
         :return: 
         """
-        try:
-            if http_type == 'post':
-                # 发送post请求
-                HttpUtils.do_post(url, params)
-            else:
-                # 发送get请求
-                HttpUtils.do_get(url, params)
-        except Exception as e:
-            logger.exception(e)
-            return SystemConstants.REMOTE_SERVICE_ERROR
+        pass
 
     @staticmethod
     def do_service(service_path='', method='', params=None, version='', power=None):

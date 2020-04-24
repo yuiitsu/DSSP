@@ -9,9 +9,9 @@ import time
 import datetime
 import calendar
 
-from tools.logs import Logs
+from tools.logs import logs
 
-logger = Logs().logger
+logger = logs.logger
 
 
 class DateUtils(object):

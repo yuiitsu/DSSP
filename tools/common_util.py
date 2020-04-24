@@ -12,11 +12,9 @@ import hashlib
 import random
 import traceback
 import re
-from source.properties import Properties
-from tools.logs import Logs
+from tools.logs import logs
 
-properties = Properties()
-logger = Logs().logger
+logger = logs.logger
 
 
 class CommonUtil(object):

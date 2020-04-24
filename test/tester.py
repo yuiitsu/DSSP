@@ -32,7 +32,7 @@ class Tester(object):
             self.logger.exception(e)
 
     def run(self, func):
-        config_file = ''
+        config_file = '../conf/'
         arguments = sys.argv
         for k, v in enumerate(arguments):
             if v == '-c':

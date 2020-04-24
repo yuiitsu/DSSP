@@ -191,7 +191,7 @@ class server(object):
             print('no port, eg. python2 index.py 9000')
             exit()
 
-        config_file = ''
+        config_file = '../conf/'
         host = '0.0.0.0'
         port = 9000
         arguments = sys.argv
