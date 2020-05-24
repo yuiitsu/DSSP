@@ -9,9 +9,8 @@
 import ssl
 import aioredis
 from source.properties import properties
-from tools.logs import logs
+from tools.logs import logs as logger
 
-logger = logs.logger
 
 REDIS_HOST = properties.get("setting", "redis", "REDIS_HOST")
 REDIS_PORT = int(properties.get('setting', 'redis', 'REDIS_PORT'))

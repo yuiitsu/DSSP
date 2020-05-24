@@ -6,7 +6,7 @@ from source.properties import properties
 from source.sql_builder import SqlBuilder
 from tools.date_json_encoder import CJsonEncoder
 from tools.common_util import CommonUtil
-from tools.date_utils import DateUtils
+from tools.date_utils import dateUtils
 from tools.logs import logs
 
 
@@ -24,11 +24,10 @@ class AsyncModelBase(SqlBuilder):
         cursorclass=tormysql.cursor.DictCursor,
     )
 
-    properties = properties
     date_encoder = CJsonEncoder
     util = CommonUtil
-    date_utils = DateUtils
-    logger = logs.logger
+    date_utils = dateUtils
+    logger = logs
 
     async def do_sqls(self, params_list):
         sql = ''
@@ -68,9 +67,21 @@ class AsyncModelBase(SqlBuilder):
 
         return result
 
-    async def page_find(self, table_name, params, value_tuple):
-        sql = self.build_paginate(table_name, params)
-        sql_count = self.build_get_rows(table_name, params)
+    async def page_find(self, table_name, params, value_tuple, sql='', sql_count=''):
+        """
+        :param table_name:
+        :param params:
+        :param value_tuple:
+        :param sql:
+        :param sql_count:
+        :return:
+        """
+        if not sql:
+            sql = self.build_paginate(table_name, params)
+
+        if not sql_count:
+            sql_count = self.build_get_rows(table_name, params)
+
         result = None
         try:
             cursor = await self.async_pools.execute(sql, value_tuple)

@@ -14,7 +14,7 @@ from tornado.httpclient import HTTPRequest
 from tornado.httpclient import AsyncHTTPClient
 from tools.logs import logs
 
-logger = logs.logger
+logger = logs
 
 
 class HttpUtils(object):

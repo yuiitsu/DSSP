@@ -6,14 +6,13 @@
 @time: 17/4/18 下午5:21
 service 服务模块
 """
+import re
 import importlib
+import traceback
 
-from tools.common_util import CommonUtil
 from tools.httputils import HttpUtils
-from tools.logs import Logs
+from tools.logs import logs as logger
 import time
-
-logger = Logs().logger
 
 
 class ServiceManager(object):
@@ -28,7 +27,7 @@ class ServiceManager(object):
         :param version: 
         :return: 
         """
-        path_version = CommonUtil.get_loader_version(service_path)
+        path_version = ServiceManager.get_loader_version(service_path)
         if path_version:
             model = importlib.import_module('src.module.' + service_path)
         else:
@@ -87,3 +86,22 @@ class ServiceManager(object):
         setattr(service, 'language_code', language_module.Code)
         func = getattr(service, method)
         return func
+
+    @staticmethod
+    def get_loader_version(path=None):
+        """
+        获取调用者的Version
+        """
+        version = None
+        if path:
+            version = re.findall(r"^v(.+?)\.", path)
+            if version:
+                version = 'v' + version[0]
+
+        if not version:
+            caller = traceback.extract_stack()[-3]
+            caller_path = caller[0]
+            version = re.findall(r"/src/module/(.+?)/", caller_path)
+            if version:
+                version = version[0]
+        return version

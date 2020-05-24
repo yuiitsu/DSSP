@@ -5,19 +5,33 @@
 @file: common_util.py
 @time: 17/4/24 上午11:31
 """
-import json
-import cgi
 import time
 import hashlib
 import random
-import traceback
-import re
-from tools.logs import logs
-
-logger = logs.logger
+import shortuuid
 
 
 class CommonUtil(object):
+
+    @staticmethod
+    def is_empty(keys, my_dict):
+        """
+        判断keys中的元素是否存在为空
+        :param keys:
+        :param my_dict:
+        :return: True/False
+        """
+        if not isinstance(keys, (str, list)):
+            return False
+
+        if isinstance(keys, str):
+            keys = [keys]
+
+        for key in keys:
+            if key not in my_dict or my_dict[key] == '':
+                return True
+
+        return False
 
     @classmethod
     def salt(cls, salt_len=6, is_num=False, chrset=''):
@@ -45,26 +59,4 @@ class CommonUtil(object):
         创建随机字符串
         :return:
         """
-        text = str(time.time()) + cls.salt(12)
-        m = hashlib.md5()
-        m.update(bytes(text.encode(encoding='utf-8')))
-        return m.hexdigest()
-
-    @staticmethod
-    def get_loader_version(path=None):
-        """
-        获取调用者的Version
-        """
-        version = None
-        if path:
-            version = re.findall(r"^v(.+?)\.", path)
-            if version:
-                version = 'v' + version[0]
-
-        if not version:
-            caller = traceback.extract_stack()[-3]
-            caller_path = caller[0]
-            version = re.findall(r"/src/module/(.+?)/", caller_path)
-            if version:
-                version = version[0]
-        return version
+        return shortuuid.uuid()

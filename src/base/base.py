@@ -16,7 +16,6 @@ from source.controller import Controller
 from source.service_manager import ServiceManager as serviceManager
 from tools.date_json_encoder import CJsonEncoder
 from tools.logs import Logs
-from tools.common_util import CommonUtil
 
 
 class Base(Controller):
@@ -82,7 +81,7 @@ class Base(Controller):
         :param params: 
         :return: 
         """
-        version = CommonUtil.get_loader_version(service_path)
+        version = serviceManager.get_loader_version(service_path)
         power_tree = self.settings['power_tree']
         return serviceManager.do_service(service_path, method, params=params, version=version,
                                          power=power_tree)
