@@ -38,7 +38,6 @@ class Tester(object):
             if v == '-c':
                 config_file = arguments[k + 1]
         #
-        config_file = config_file if config_file else CONF['tester']['properties_path']
         properties.build(config_file)
         #
         f = eval('self.' + func)

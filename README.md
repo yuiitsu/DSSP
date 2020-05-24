@@ -8,11 +8,11 @@
 我们提供了一个运行环境的Docker镜像，可以非常方便的启动服务
 #### 获取镜像
 ```shell script
-docker pull onlyfu/python-tornado:latest
+docker pull onlyfu/ddsp:latest
 ```
 #### 启动镜像
 ```shell script
-docker run --name python -p 9000:9000 -v /apps/conf/wmb2c/:/apps/conf/wmb2c/ -v /apps/web/logs/:/apps/web/logs/ -v /apps/web/:/apps/web/ -t docker.io/onlyfu/python-tornado:latst
+docker run --name python -p 9000:9000 -t docker.io/onlyfu/ddsp:latst
 ```
 
 ### 2. 自行安装信赖包

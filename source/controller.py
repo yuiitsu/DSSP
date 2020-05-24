@@ -45,7 +45,7 @@ class Controller(tornado.web.RequestHandler):
         # self.model.__del__()
         pass
 
-    async def display(self, view_name, view_path=''):
+    def display(self, view_name, view_path=''):
         """ 
         输出模板
         调用模板输出，使用当前类名为模板目录
