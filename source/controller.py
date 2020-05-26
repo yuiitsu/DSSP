@@ -30,7 +30,7 @@ class Controller(tornado.web.RequestHandler):
     escape = tornado.escape
     version = ''
     importlib = importlib
-    logger = logs.logger
+    logger = logs
 
     def initialize(self):
         """
@@ -85,14 +85,6 @@ class Controller(tornado.web.RequestHandler):
                     result[k] = value_strip
                 else:
                     result[k] = v[0].strip().decode('utf-8')
-
-            # 处理request.body数据
-            if self.request.body:
-                try:
-                    result['___body'] = self.request.body.decode(encoding='utf-8', errors='strict')
-                    result['___body'] = json.loads(result['___body'])
-                except Exception as e:
-                    result['___body'] = self.request.body
 
             return result
         else:

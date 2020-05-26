@@ -21,7 +21,18 @@ class T(Tester):
             'confirm_password': '123456'
         }
 
+    def get_access_token(self):
+        self.path = 'v1.user.admin.auth.jwt.service'
+        self.method = 'get_access_token'
+        self.params = {
+            '___body': {
+                'account': 'fuwy@foxmail.com',
+                'password': '1234567'
+            }
+        }
+
 
 if __name__ == '__main__':
     t = T()
-    t.run('register')
+    # t.run('register')
+    t.run('get_access_token')

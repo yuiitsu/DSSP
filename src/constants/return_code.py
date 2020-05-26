@@ -12,4 +12,5 @@ Code = {
     'PARAMS_TYPE_ERROR': {'code': 1002, 'msg': '请求参数类型错误'},
     'DATA_NOT_EXIST': {'code': 1003, 'msg': '数据不存在'},
     'DATA_EXIST': {'code': 1004, 'msg': '数据已存在'},
+    'CONTENT_TYPE_ERROR': {'code': 1005, 'msg': 'Content-Type必须为application/json'},
 }

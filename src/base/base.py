@@ -1,21 +1,14 @@
 #!usr/bin/env python
 # -*- coding:utf-8 -*-
 
-import hashlib
 import json
-import random
-import re
 import time
 
-import tornado.gen
-
-from constants.error_code import Code
+from constants.return_code import Code
 from source.controller import Controller
-# from source.properties import Properties
-# from source.async_redis import AsyncRedis
 from source.service_manager import ServiceManager as serviceManager
 from tools.date_json_encoder import CJsonEncoder
-from tools.logs import Logs
+from tools.logs import logs
 
 
 class Base(Controller):
@@ -23,9 +16,8 @@ class Base(Controller):
     json = json
     time = time
     # redis = AsyncRedis()
-    error_code = Code
-    # properties = Properties()
-    logger = Logs().logger
+    return_code = Code
+    logger = logs
     _params = {}
 
     async def prepare(self):
@@ -37,6 +29,12 @@ class Base(Controller):
         :return:
         """
         self._params = self.get_params()
+        headers = self.request.headers
+        content_type = headers['Content-Type']
+        # 检查content type，必须使用application/json
+        if content_type != 'application/json':
+            self.out(self._e('CONTENT_TYPE_ERROR'))
+            self.finish()
 
     def out(self, data):
         """ 
@@ -86,24 +84,22 @@ class Base(Controller):
         return serviceManager.do_service(service_path, method, params=params, version=version,
                                          power=power_tree)
 
-    def _e(self, error_key):
+    def _e(self, return_code_key, message_ext='', data=''):
         """
-        :param error_key:
-        :return: 
-        """
-        data = {}
-        for key in self.error_code[error_key]:
-            data[key] = self.error_code[error_key][key]
-
-        return data
-
-    def _gr(self, data):
-        """
-        tornado.gen.Return
-        :param data: 数据
+        响应报文固定对象
+        :param return_code_key:
+        :param message_ext:
+        :param data:
         :return:
         """
-        return tornado.gen.Return(data)
+        result = self.return_code[return_code_key]
+        if message_ext:
+            result['msg'] += ' ' + message_ext
+
+        if data:
+            result['data'] = data
+
+        return result
 
     def params(self, key=''):
         """
@@ -111,6 +107,13 @@ class Base(Controller):
         :param key:
         :return:
         """
+        if self.request.body:
+            try:
+                ___body = self.request.body.decode(encoding='utf-8', errors='strict')
+                self._params['___body'] = json.loads(___body)
+            except Exception as e:
+                self.logger.exception(e)
+
         if not key:
             return self._params
         elif key not in self._params:

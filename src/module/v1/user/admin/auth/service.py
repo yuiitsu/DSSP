@@ -38,9 +38,10 @@ class Service(ServiceBase):
         if account_res['code'] == 0:
             return self._e('DATA_EXIST')
 
+        # create the account
         result = await self.do_service('v1.user.admin.account.service', 'create', {
             'account': params['account'],
             'password': params['password'],
-            'salt': '',
+            'account_type': 'email',
         })
         return result

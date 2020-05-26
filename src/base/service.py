@@ -12,6 +12,7 @@ import task
 from constants.return_code import Code
 from source.service_manager import ServiceManager as serviceManager
 from tools.common_util import CommonUtil
+from tools.date_utils import dateUtils
 from tools.httputils import HttpUtils
 from tools.logs import logs
 
@@ -24,6 +25,7 @@ class ServiceBase(object):
     return_code = Code
     http_utils = HttpUtils
     common_utils = CommonUtil
+    date_utils = dateUtils
     logger = logs
     task = task
 
@@ -68,7 +70,7 @@ class ServiceBase(object):
     #             method = item['method']
     #             await self.task.add(service_path, method, data)
 
-    def _e(self, return_code_key, message_ext='', data = ''):
+    def _e(self, return_code_key, message_ext='', data=''):
         """
         响应报文固定对象
         :param return_code_key:

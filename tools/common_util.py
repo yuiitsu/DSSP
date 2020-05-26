@@ -33,8 +33,8 @@ class CommonUtil(object):
 
         return False
 
-    @classmethod
-    def salt(cls, salt_len=6, is_num=False, chrset=''):
+    @staticmethod
+    def salt(salt_len=6, is_num=False, chrset=''):
         """
         密码加密字符串
         生成一个固定位数的随机字符串，包含0-9a-z
@@ -53,10 +53,20 @@ class CommonUtil(object):
 
         return ''.join(salt)
 
-    @classmethod
-    def create_uuid(cls):
+    @staticmethod
+    def create_uuid():
         """
         创建随机字符串
         :return:
         """
         return shortuuid.uuid()
+
+    @staticmethod
+    def md5(text):
+        """
+        md5加密
+        :param text:
+        :return:
+        """
+        result = hashlib.md5(text.encode(encoding='utf-8'))
+        return result.hexdigest()
