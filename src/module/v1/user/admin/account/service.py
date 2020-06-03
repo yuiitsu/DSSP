@@ -48,8 +48,10 @@ class Service(ServiceBase):
 
         salt = self.common_utils.salt()
         password = self.common_utils.md5(self.common_utils.md5(params['password']) + salt)
+        #
+        admin_id = self.common_utils.create_uuid()
         result = await self.model.create({
-            'admin_id': self.common_utils.create_uuid(),
+            'admin_id': admin_id,
             'account': params['account'],
             'account_type': params['account_type'],
             'password': password,
@@ -59,4 +61,6 @@ class Service(ServiceBase):
         if result is None:
             return self._e('CREATE_ACCOUNT_FAILED')
 
-        return self._rs()
+        return self._rs({
+            'admin_id': admin_id
+        })

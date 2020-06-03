@@ -25,7 +25,7 @@ class Service(ServiceBase):
         :return:
         """
         if self.common_utils.is_empty(['account', 'password', 'confirm_password'], params):
-            return self._e('PARAMS_NOT_EXIST', message_ext='account, password, confirm_password不能为空')
+            return self._e('PARAMS_NOT_EXIST', message='account, password, confirm_password不能为空')
 
         #
         if params['password'] != params['confirm_password']:
@@ -36,7 +36,7 @@ class Service(ServiceBase):
             'account': params['account']
         })
         if account_res['code'] == 0:
-            return self._e('DATA_EXIST')
+            return self._e('DATA_EXIST', message='帐户已存在')
 
         # create the account
         result = await self.do_service('v1.user.admin.account.service', 'create', {
