@@ -70,15 +70,19 @@ class ServiceBase(object):
     #             method = item['method']
     #             await self.task.add(service_path, method, data)
 
-    def _e(self, return_code_key, message_ext='', data=''):
+    def _e(self, return_code_key, message='', message_ext='', data=''):
         """
         响应报文固定对象
         :param return_code_key:
+        :param message:
         :param message_ext:
         :param data:
         :return:
         """
         result = self.return_code[return_code_key]
+        if message:
+            result['msg'] = message
+
         if message_ext:
             result['msg'] += ' ' + message_ext
 

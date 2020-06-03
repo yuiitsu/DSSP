@@ -9,18 +9,19 @@ from source.controller import Controller
 from source.service_manager import ServiceManager as serviceManager
 from tools.date_json_encoder import CJsonEncoder
 from tools.logs import logs
+from tools.jwt import JWT
 
 
 class Base(Controller):
 
     json = json
     time = time
-    # redis = AsyncRedis()
     return_code = Code
     logger = logs
     _params = {}
+    auth = None
 
-    async def prepare(self):
+    def prepare(self):
         """
         接受请求前置方法
             1.解析域名
@@ -36,6 +37,34 @@ class Base(Controller):
             self.out(self._e('CONTENT_TYPE_ERROR'))
             self.finish()
 
+        # 检查访问服务是否需要授权校验
+        if self.auth:
+            if self.auth[0] is not None:
+                self.check_authorization_status(self.auth[0])
+
+    def check_authorization_status(self, authorizations):
+        """
+        检查用户授权状态
+        @param authorizations:
+        @return:
+        """
+        access_token = ''
+        if self.request.headers.get('access_token'):
+            access_token = self.request.headers['access_token']
+        elif self.request.headers.get('Authorization'):
+            access_token = self.request.headers['Authorization']
+            access_token = access_token.split(' ')[1]
+
+        auth_data = JWT.verify(access_token)
+        if not auth_data:
+            self.out(self._e('NOT_LOGGED_IN'))
+
+        #
+        if auth_data['user_type'] not in authorizations:
+            self.out(self._e('PERMISSION_FORBIDDEN'))
+
+        self._params.update(auth_data)
+
     def out(self, data):
         """ 
         输出结果
@@ -43,18 +72,21 @@ class Base(Controller):
         """
         self.set_header("Content-Type", "application/json; charset=UTF-8")
         self.write(self.json.dumps(data, cls=CJsonEncoder))
+        self.finish()
 
-    def error_out(self, error, data=''):
+    def error_out(self, error, data='', status_code=500):
         """
         错误输出
         :param error: 错误信息对象
         :param data: 返回数据字典
-        :return: 
+        :param status_code: http status code, default 500
+        :return:
         """
         out = error
         if data:
             out['data'] = data
 
+        self.set_status(status_code)
         self.write(out)
 
     async def get(self):
@@ -62,14 +94,35 @@ class Base(Controller):
         重写父类get方法，接受GET请求
         如果执行到此方法，说明请求类型错误
         """
-        self.error_out(self._e('REQUEST_TYPE_ERROR'))
+        self.error_out(self._e('REQUEST_TYPE_ERROR'), status_code=405)
 
     async def post(self):
         """
         重写父类post方法，接受POST请求
         如果执行到此方法，说明请求类型错误
         """
-        self.error_out(self._e('REQUEST_TYPE_ERROR'))
+        self.error_out(self._e('REQUEST_TYPE_ERROR'), status_code=405)
+
+    async def put(self):
+        """
+        重写父类put方法，接受PUT请求
+        如果执行到此方法，说明请求类型错误
+        """
+        self.error_out(self._e('REQUEST_TYPE_ERROR'), status_code=405)
+
+    async def delete(self):
+        """
+        重写父类delete方法，接受DELETE请求
+        如果执行到此方法，说明请求类型错误
+        """
+        self.error_out(self._e('REQUEST_TYPE_ERROR'), status_code=405)
+
+    async def patch(self):
+        """
+        重写父类delete方法，接受DELETE请求
+        如果执行到此方法，说明请求类型错误
+        """
+        self.error_out(self._e('REQUEST_TYPE_ERROR'), status_code=405)
 
     def do_service(self, service_path, method, params):
         """

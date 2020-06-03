@@ -69,4 +69,6 @@ class JWT(object):
             if encoded != access_token:
                 return False
 
+            return p_dict
+
         return False
