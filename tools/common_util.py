@@ -1,11 +1,10 @@
 # -*- coding:utf-8 -*-
 
 """
-@author: delu
+@author onlyfu
 @file: common_util.py
-@time: 17/4/24 上午11:31
+@time 2020/6/2
 """
-import time
 import hashlib
 import random
 import shortuuid
