@@ -28,6 +28,7 @@ class AsyncModelBase(SqlBuilder):
     util = CommonUtil
     date_utils = dateUtils
     logger = logs
+    tx = None
 
     async def do_sqls(self, params_list):
         sql = ''

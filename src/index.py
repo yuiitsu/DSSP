@@ -18,14 +18,8 @@ import tornado.web
 
 # 设置环境，根据项目目录结构设置相对路径
 from route import route, power
-from tools.generate_power_tree import GeneratePowerTree
 import source.controller as controller
 from conf.config import CONF
-
-# 将权限树配置到CONF中
-CONF['power_tree'] = GeneratePowerTree().generate_power_tree(power)
-print('power_tree:')
-print(json.dumps(CONF['power_tree']))
 
 print('server started')
 
