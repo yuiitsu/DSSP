@@ -42,3 +42,6 @@ class DateUtils(object):
         :return:
         """
         return time.time()
+
+
+dateUtils = DateUtils
