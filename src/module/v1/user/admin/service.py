@@ -17,7 +17,7 @@ class Service(ServiceBase):
         self.model = Model()
         self.return_code = Code()
 
-    async def query(self, params):
+    async def query_info(self, params):
         """
         获取登录用户信息
         @param params:

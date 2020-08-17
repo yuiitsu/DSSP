@@ -4,7 +4,7 @@
 import json
 import time
 
-from constants.return_code import Code
+from .return_code import Code
 from source.controller import Controller
 from source.service_manager import ServiceManager as serviceManager
 from tools.date_json_encoder import CJsonEncoder
@@ -34,7 +34,7 @@ class Base(Controller):
         headers = self.request.headers
         content_type = headers['Content-Type']
         # 检查content type，必须使用application/json
-        if content_type != 'application/json':
+        if self.request.method in ('POST', 'PUT') and content_type != 'application/json':
             self.out(self._e('CONTENT_TYPE_ERROR'))
             self.finish()
 
