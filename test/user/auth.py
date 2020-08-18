@@ -6,7 +6,6 @@
 @author: yuiitsu
 @time: 2020-05-24 23:14
 """
-import os
 from test.tester import Tester
 
 
@@ -33,19 +32,19 @@ class T(Tester):
             }
         })
         # 1
-        # self.assert_equals({
-        #     '___body': {
-        #         'account': 'fuwy@foxmail.com',
-        #         'password': '1234567'
-        #     }
-        # }, {"code": 20101, "msg": "帐号或密码错误"})
-        # # 2
-        # self.assert_in({
-        #     '___body': {
-        #         'account': 'fuwy@foxmail.com',
-        #         'password': '123456'
-        #     }
-        # }, 'code', 0)
+        self.assert_equals({
+            '___body': {
+                'account': 'fuwy@foxmail.com',
+                'password': '1234567'
+            }
+        }, {"code": 20101, "msg": "帐号或密码错误"})
+        # 2
+        self.assert_in({
+            '___body': {
+                'account': 'fuwy@foxmail.com',
+                'password': '123456'
+            }
+        }, 'code', 0)
 
 
 if __name__ == '__main__':
